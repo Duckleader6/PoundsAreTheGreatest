@@ -221,5 +221,3 @@ async def main():
             print("Brother put in a real input")
         if await input("Do you want to convert something else? (y/n)\n") == "n":
             break
-
-await main()
