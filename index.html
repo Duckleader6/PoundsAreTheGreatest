@@ -6,11 +6,7 @@
     <title>Pounds Converter</title>
     <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Courier New', monospace;
@@ -30,9 +26,7 @@
             border-bottom: 1px solid #3e3e42;
         }
 
-        .header h1 {
-            font-size: 20px;
-        }
+        .header h1 { font-size: 20px; }
 
         .btn {
             padding: 8px 16px;
@@ -45,9 +39,7 @@
             font-size: 14px;
         }
 
-        .btn:hover {
-            background-color: #005a9e;
-        }
+        .btn:hover { background-color: #005a9e; }
 
         .container {
             flex: 1;
@@ -69,10 +61,7 @@
             margin-bottom: 10px;
         }
 
-        .input-line {
-            display: flex;
-            gap: 8px;
-        }
+        .input-line { display: flex; gap: 8px; }
 
         .input-line input {
             flex: 1;
@@ -84,10 +73,7 @@
             border-radius: 2px;
         }
 
-        .input-line input:focus {
-            outline: none;
-            border-color: #007acc;
-        }
+        .input-line input:focus { outline: none; border-color: #007acc; }
 
         .input-line button {
             padding: 6px 12px;
@@ -99,28 +85,11 @@
             font-family: 'Courier New', monospace;
         }
 
-        .input-line button:hover {
-            background-color: #005a9e;
-        }
+        .input-line button:hover { background-color: #005a9e; }
 
-        .loading {
-            text-align: center;
-            color: #858585;
-            padding: 20px;
-        }
-
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #464647;
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: #5a5a5a;
-        }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-thumb { background: #464647; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
     </style>
 </head>
 <body>
@@ -129,108 +98,97 @@
         <button class="btn" onclick="window.location.href='conversiontable.html';">📋 Conversion Table</button>
     </div>
     <div class="container">
-        <div class="output" id="output"><div class="loading">Loading...</div></div>
+        <div class="output" id="output">Loading Python environment...</div>
         <div class="input-line">
-            <input type="text" id="input" disabled placeholder="Waiting..." autocomplete="off">
-            <button id="btn" onclick="submit()" disabled>Send</button>
+            <input type="text" id="input" disabled placeholder="Waiting for Python to load..." autocomplete="off">
+            <button id="sendBtn" onclick="submitInput()" disabled>Send</button>
         </div>
     </div>
 
     <script>
-        let py = null;
+        // Queue-based async input: Python suspends via asyncio, JS resolves when user submits
         let inputResolve = null;
+        const outputEl = document.getElementById('output');
+        const inputEl  = document.getElementById('input');
+        const sendBtn  = document.getElementById('sendBtn');
 
-        async function init() {
-            try {
-                py = await loadPyodide();
-                
-                const resp = await fetch('converter.py');
-                const code = await resp.text();
-                
-                // Set up output capture
-                py.runPython(`
-import sys
-
-class OutputCapture:
-    def __init__(self):
-        self.buffer = ""
-    def write(self, text):
-        self.buffer += text
-        return len(text)
-    def flush(self):
-        pass
-
-output = OutputCapture()
-sys.stdout = output
-sys.stderr = output
-
-# Override input to work with JS
-pending_input = ""
-
-def custom_input(prompt=""):
-    global pending_input
-    if prompt:
-        sys.stdout.write(prompt)
-        sys.stdout.flush()
-    from js import wait_for_input
-    pending_input = wait_for_input()
-    return pending_input
-
-__builtins__.input = custom_input
-                `);
-                
-                // Make wait_for_input accessible from Python
-                window.wait_for_input = function() {
-                    return new Promise(r => { inputResolve = r; });
-                };
-                
-                document.getElementById('output').innerHTML = '';
-                document.getElementById('input').disabled = false;
-                document.getElementById('btn').disabled = false;
-                
-                // Run the converter script in background
-                setTimeout(() => {
-                    try {
-                        py.runPython(code);
-                    } catch(e) {
-                        console.log('Script finished or waiting for input');
-                    }
-                }, 100);
-                
-                pollOutput();
-                
-            } catch(e) {
-                document.getElementById('output').textContent = 'Error: ' + e.message;
-            }
+        // Called from Python via pyodide to wait for user input
+        function jsRequestInput(prompt) {
+            appendOutput(prompt);
+            return new Promise(resolve => { inputResolve = resolve; });
         }
 
-        function pollOutput() {
-            if (py) {
-                try {
-                    const output = py.globals.get('output');
-                    const text = output.buffer;
-                    if (text) {
-                        document.getElementById('output').textContent = text;
-                        document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
-                    }
-                } catch(e) {}
-            }
-            setTimeout(pollOutput, 150);
-        }
-
-        function submit() {
-            const input = document.getElementById('input');
-            const val = input.value;
-            input.value = '';
+        function submitInput() {
+            const val = inputEl.value;
+            inputEl.value = '';
             if (inputResolve) {
+                appendOutput(val + '\n');   // echo input into terminal
                 inputResolve(val);
                 inputResolve = null;
             }
         }
 
-        document.getElementById('input').addEventListener('keypress', e => {
-            if (e.key === 'Enter') submit();
-        });
+        function appendOutput(text) {
+            // Replace the loading message on first real write
+            if (outputEl.dataset.fresh !== 'true') {
+                outputEl.textContent = '';
+                outputEl.dataset.fresh = 'true';
+            }
+            outputEl.textContent += text;
+            outputEl.scrollTop = outputEl.scrollHeight;
+        }
+
+        inputEl.addEventListener('keypress', e => { if (e.key === 'Enter') submitInput(); });
+
+        async function init() {
+            try {
+                const py = await loadPyodide();
+
+                // Expose helpers to Python
+                py.globals.set('_js_request_input', py.toPy(jsRequestInput));
+                py.globals.set('_js_print',         py.toPy(appendOutput));
+
+                // Patch sys.stdout and builtins.input inside Python
+                await py.runPythonAsync(`
+import sys, builtins
+from pyodide.ffi import to_js
+
+class JSStdout:
+    def write(self, text):
+        _js_print(text)
+        return len(text)
+    def flush(self):
+        pass
+
+sys.stdout = JSStdout()
+sys.stderr = JSStdout()
+
+async def async_input(prompt=""):
+    from pyodide.ffi import to_js
+    result = await _js_request_input(prompt)
+    return result
+
+builtins.input = async_input
+`);
+
+                // Enable the input box
+                inputEl.disabled = false;
+                inputEl.placeholder = 'Type here and press Enter...';
+                sendBtn.disabled = false;
+
+                // Fetch and run converter.py
+                const resp = await fetch('converter.py');
+                if (!resp.ok) throw new Error(`Could not load converter.py: ${resp.status}`);
+                const code = await resp.text();
+
+                // Wrap user code so its input() calls hit our async version
+                await py.runPythonAsync(code);
+
+            } catch (e) {
+                outputEl.textContent = 'Error: ' + e.message;
+                console.error(e);
+            }
+        }
 
         init();
     </script>
