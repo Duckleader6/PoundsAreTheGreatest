@@ -77,23 +77,23 @@ while True:
                 if to_unit == 4:
                     print(number1 * 1.404 * 12 * 11)
                 if to_unit == 5:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 10)
                 if to_unit == 6:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 9)
                 if to_unit == 7:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 8)
                 if to_unit == 8:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 7)
                 if to_unit == 9:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 6)
                 if to_unit == 10:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 5)
                 if to_unit == 11:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 4)
                 if to_unit == 12:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 3)
                 if to_unit == 13:
-                    print(number1 * 1.404 * 12 * 11)
+                    print(number1 * 1.404 * 12 * 2)
                 if to_unit == 14:
                     print(number1 * 1.404 * 12 * 24)
                 if to_unit == 15:
