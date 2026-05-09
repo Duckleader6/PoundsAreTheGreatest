@@ -106,6 +106,51 @@
             padding: 10px;
             color: #ce9178;
         }
+
+        .instructions {
+            margin-bottom: 30px;
+            background-color: #252526;
+            padding: 20px;
+            border-radius: 4px;
+            border: 1px solid #3e3e42;
+            line-height: 1.6;
+            color: #e0e0e0;
+        }
+
+        .instructions h2 {
+            color: #4ec9b0;
+            margin-bottom: 10px;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-input {
+            flex: 1;
+            background-color: #1e1e1e;
+            border: 1px solid #3e3e42;
+            color: #e0e0e0;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            border-radius: 4px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007acc;
+            box-shadow: 0 0 0 1px #007acc;
+        }
+
+        .search-input::placeholder {
+            color: #858585;
+        }
+
+        .hidden-item {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -115,6 +160,21 @@
             <button class="back-btn" onclick="window.location.href='index.html';">
                 ← Back to Converter
             </button>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Use This Table</h2>
+            <p>This table shows all the units of weight measurement you can convert to from pounds. The way that it works is easy. Search for what tou want to convert to make sure it exists. Then, use the ID number once you are in the right group of the file converter to convert. For example if i want to convert 120 pounds to saturns. I would search for saturn, find the id, go to the converter, navigate to the milky way tab and then type the id in. This is most useful for the misc tab in stupid stuff.</p>
+        </div>
+
+        <div class="search-container">
+            <input 
+                type="text" 
+                id="searchInput" 
+                class="search-input" 
+                placeholder="Search units by name or ID..."
+                onkeyup="searchTable()"
+            >
         </div>
 
         <div class="section">
@@ -205,5 +265,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function searchTable() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const items = document.querySelectorAll('.conversion-item');
+            
+            items.forEach(item => {
+                const id = item.querySelector('.id').textContent.toLowerCase();
+                const name = item.querySelector('.name').textContent.toLowerCase();
+                
+                if (id.includes(searchInput) || name.includes(searchInput)) {
+                    item.classList.remove('hidden-item');
+                } else {
+                    item.classList.add('hidden-item');
+                }
+            });
+        }
+    </script>
 </body>
 </html>
