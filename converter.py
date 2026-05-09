@@ -126,7 +126,7 @@ while True:
         
 #pounds to stupid stuff
         if option1 == 3:
-            option2 = int(input("What group of stuff?\n(1)Cosmic Stuff\n(2)Currencies"))
+            option2 = int(input("What group of stuff?\n(1)Cosmic Stuff\n(2)Currencies\n(3)Family And Friends\n"))
             if option2 == 1:
                 option3 = int(input("What group of stuff?\n(1)Milky Way\n"))
                 if option3 == 1:
@@ -156,11 +156,28 @@ while True:
             
 #pounds to currencies.
             if option2 == 2:
-                option3 = int(input("Which Currencies?\n(1)USD"))
+                option3 = int(input("Which Currencies?\n(1)USD\n"))
+                
+                
+#pounds to USD
                 if option3 == 1:
-                    to_unit = int(input("What would you like to convert it to?\n(1)Bills (they are all the same weight, $1 - $100 bills)\n"))
+                    to_unit = int(input("What would you like to convert it to?\n(1)Bills (they are all the same weight, $1 - $100 bills)\n(2)Pennies before 1983\n(3)Pennies after 1983\n(4)Nickels\n(5)Dimes\n(6)Quarters\n(7)Half Dollars\n(8)Dollar Coins\n"))
                     if to_unit == 1:
                         print(number1 * 453.592)
+                    if to_unit == 2:
+                        print(number1 * 453.592 / 3.11)
+                    if to_unit == 3:
+                        print(number1 * 453.592 / 2.5)
+                    if to_unit == 4:
+                        print(number1 * 453.592 / 5)
+
+
+
+#pOUNDS TO FAMILY AND FRIENDS
+            if option2 == 3:
+                to_unit = int(input("What would you like to convert it to?\n(1)Buttercup the Dog\n"))
+                if to_unit == 1:
+                    print(number1 / 18.8)
     
     
 # Convert something else to pounds.
