@@ -1,5 +1,5 @@
 import math
-
+print("\nI won't lie I am like very bad at organizing and for some stuff I don't wanna so I will make a list that you can search on to find all of them. Any suggestions can go in the issues area.\n")
 while True:
     from_unit = int(input("What would you like to convert from?\n(1)Pounds\n(2)Something Else BTW if it is something else you can only go to pounds.\n"))
     if from_unit == 1:
@@ -170,6 +170,14 @@ while True:
                         print(number1 * 453.592 / 2.5)
                     if to_unit == 4:
                         print(number1 * 453.592 / 5)
+                    if to_unit == 5:
+                        print(number1 * 453.592 / 2.268)
+                    if to_unit == 6:
+                        print(number1 * 453.592 / 5.67)
+                    if to_unit == 7:
+                        print(number1 * 453.592 / 11.34)
+                    if to_unit == 8:
+                        print(number1 * 453.592 / 8.1)
 
 
 
