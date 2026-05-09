@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pounds Converter Terminal</title>
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
+    <title>Pounds Converter</title>
+    <script defer src="https://cdn.jsdelivr.net/pyodide/v0.23.4/full/pyodide.js"></script>
     <style>
         * {
             margin: 0;
@@ -19,7 +19,6 @@
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
         }
 
         .header {
@@ -33,10 +32,9 @@
 
         .header h1 {
             font-size: 20px;
-            font-weight: bold;
         }
 
-        .conversion-table-btn {
+        .btn {
             padding: 8px 16px;
             background-color: #007acc;
             color: white;
@@ -45,59 +43,53 @@
             cursor: pointer;
             font-family: 'Courier New', monospace;
             font-size: 14px;
-            transition: background-color 0.3s;
         }
 
-        .conversion-table-btn:hover {
+        .btn:hover {
             background-color: #005a9e;
         }
 
-        .terminal-container {
+        .container {
             flex: 1;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             margin: 10px;
-            background-color: #1e1e1e;
-            border: 1px solid #3e3e42;
-            border-radius: 4px;
+            overflow: hidden;
         }
 
-        .terminal-output {
+        .output {
             flex: 1;
             overflow-y: auto;
             padding: 15px;
             white-space: pre-wrap;
             word-wrap: break-word;
             background-color: #1e1e1e;
+            border: 1px solid #3e3e42;
+            border-radius: 4px;
+            margin-bottom: 10px;
         }
 
-        .terminal-input-line {
+        .input-line {
             display: flex;
-            align-items: center;
-            padding: 0 15px 15px 15px;
-            background-color: #1e1e1e;
             gap: 8px;
         }
 
-        .terminal-input {
+        .input-line input {
             flex: 1;
             background-color: #1e1e1e;
             border: 1px solid #3e3e42;
             color: #e0e0e0;
             padding: 6px 10px;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
             border-radius: 2px;
         }
 
-        .terminal-input:focus {
+        .input-line input:focus {
             outline: none;
             border-color: #007acc;
-            box-shadow: 0 0 0 1px #007acc;
         }
 
-        .send-btn {
+        .input-line button {
             padding: 6px 12px;
             background-color: #007acc;
             color: white;
@@ -105,244 +97,142 @@
             border-radius: 2px;
             cursor: pointer;
             font-family: 'Courier New', monospace;
-            font-size: 14px;
-            transition: background-color 0.3s;
         }
 
-        .send-btn:hover {
+        .input-line button:hover {
             background-color: #005a9e;
-        }
-
-        .terminal-output {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            background-color: #1e1e1e;
         }
 
         .loading {
             text-align: center;
-            padding: 20px;
             color: #858585;
+            padding: 20px;
         }
 
-        /* Scrollbar styling */
-        .terminal-output::-webkit-scrollbar {
+        ::-webkit-scrollbar {
             width: 10px;
         }
 
-        .terminal-output::-webkit-scrollbar-track {
-            background: #1e1e1e;
-        }
-
-        .terminal-output::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
             background: #464647;
             border-radius: 5px;
         }
 
-        .terminal-output::-webkit-scrollbar-thumb:hover {
+        ::-webkit-scrollbar-thumb:hover {
             background: #5a5a5a;
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <h1>Pounds Converter Terminal</h1>
-        <button class="conversion-table-btn" onclick="window.location.href='conversiontable.html';">
-            📋 Conversion Table
-        </button>
+        <h1>Pounds Converter</h1>
+        <button class="btn" onclick="window.location.href='conversiontable.html';">📋 Conversion Table</button>
     </div>
-
-    <div class="terminal-container">
-        <div class="terminal-output" id="output">
-            <div class="loading">Loading Python environment...</div>
-        </div>
-        <div class="terminal-input-line">
-            <input
-                type="text"
-                id="userInput"
-                class="terminal-input"
-                placeholder="Enter your input here..."
-                autocomplete="off"
-                disabled
-            />
-            <button class="send-btn" id="sendBtn" onclick="sendInput()" disabled>Send</button>
+    <div class="container">
+        <div class="output" id="output"><div class="loading">Loading...</div></div>
+        <div class="input-line">
+            <input type="text" id="input" disabled placeholder="Waiting..." autocomplete="off">
+            <button id="btn" onclick="submit()" disabled>Send</button>
         </div>
     </div>
 
     <script>
         let py = null;
-        let outputBuffer = '';
-        let processingInput = false;
+        let inputResolve = null;
 
-        class PyodideInputWrapper {
-            constructor() {
-                this.inputLines = [];
-            }
-
-            addInput(line) {
-                this.inputLines.push(line + '\n');
-            }
-
-            readline(size = -1) {
-                if (this.inputLines.length > 0) {
-                    return this.inputLines.shift();
-                }
-                return '';
-            }
-
-            async waitForInput() {
-                return new Promise((resolve) => {
-                    const checkInput = () => {
-                        if (this.inputLines.length > 0) {
-                            resolve(this.inputLines.shift());
-                        } else {
-                            setTimeout(checkInput, 50);
-                        }
-                    };
-                    checkInput();
-                });
-            }
-        }
-
-        const inputWrapper = new PyodideInputWrapper();
-
-        async function initializePython() {
+        async function init() {
             try {
                 py = await loadPyodide();
+                
+                const resp = await fetch('converter.py');
+                const code = await resp.text();
                 
                 // Set up output capture
                 py.runPython(`
 import sys
-import io
-from js import inputWrapper
-
-output_buffer = ""
 
 class OutputCapture:
+    def __init__(self):
+        self.buffer = ""
     def write(self, text):
-        global output_buffer
-        output_buffer += text
+        self.buffer += text
         return len(text)
-    
     def flush(self):
         pass
 
-sys.stdout = OutputCapture()
-sys.stderr = OutputCapture()
-                `);
-                
-                // Fetch and run the converter script with input override
-                const response = await fetch('converter.py');
-                const converterCode = await response.text();
-                
-                // Override input() function
-                const wrappedCode = `
-import sys
+output = OutputCapture()
+sys.stdout = output
+sys.stderr = output
 
-class InputWrapper:
-    def __init__(self):
-        self.buffer = ''
-        self.waiting = False
-    
-    def readline(self):
-        from js import inputWrapper
-        import asyncio
-        
-        # Wait for input from JS side
-        while True:
-            try:
-                # Check if input is available from JS
-                line = inputWrapper.inputLines.to_py()
-                if line and len(line) > 0:
-                    return line.pop(0)
-            except:
-                pass
-            import time
-            time.sleep(0.05)
-        return ''
+# Override input to work with JS
+pending_input = ""
 
-input_wrapper = InputWrapper()
-
-original_input = __builtins__.input
-
-def custom_input(prompt=''):
-    import sys
+def custom_input(prompt=""):
+    global pending_input
     if prompt:
         sys.stdout.write(prompt)
         sys.stdout.flush()
-    
-    from js import inputWrapper
-    import time
-    
-    # Wait for user input
-    while True:
-        if inputWrapper.inputLines and len(inputWrapper.inputLines) > 0:
-            user_input = inputWrapper.inputLines.pop(0)
-            return user_input.rstrip('\\n')
-        time.sleep(0.05)
+    from js import wait_for_input
+    pending_input = wait_for_input()
+    return pending_input
 
 __builtins__.input = custom_input
-
-${converterCode}
-                `;
+                `);
                 
-                // Create a worker to run the script
-                py.runPython(wrappedCode);
+                // Make wait_for_input accessible from Python
+                window.wait_for_input = function() {
+                    return new Promise(r => { inputResolve = r; });
+                };
                 
                 document.getElementById('output').innerHTML = '';
-                document.getElementById('userInput').disabled = false;
-                document.getElementById('sendBtn').disabled = false;
-                document.getElementById('userInput').focus();
+                document.getElementById('input').disabled = false;
+                document.getElementById('btn').disabled = false;
                 
-                // Start polling for output
+                // Run the converter script in background
+                setTimeout(() => {
+                    try {
+                        py.runPython(code);
+                    } catch(e) {
+                        console.log('Script finished or waiting for input');
+                    }
+                }, 100);
+                
                 pollOutput();
                 
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('output').innerHTML = '<div style="color: #f48771;">Error: ' + error.message + '</div>';
+            } catch(e) {
+                document.getElementById('output').textContent = 'Error: ' + e.message;
             }
         }
 
         function pollOutput() {
-            try {
-                const result = py.globals.get('output_buffer');
-                if (result && result !== outputBuffer) {
-                    const newContent = result.substring(outputBuffer.length);
-                    outputBuffer = result;
-                    
-                    const output = document.getElementById('output');
-                    const span = document.createElement('span');
-                    span.textContent = newContent;
-                    output.appendChild(span);
-                    
-                    output.scrollTop = output.scrollHeight;
-                }
-            } catch (e) {
-                console.error('Poll error:', e);
+            if (py) {
+                try {
+                    const output = py.globals.get('output');
+                    const text = output.buffer;
+                    if (text) {
+                        document.getElementById('output').textContent = text;
+                        document.getElementById('output').scrollTop = document.getElementById('output').scrollHeight;
+                    }
+                } catch(e) {}
             }
-            
-            setTimeout(pollOutput, 100);
+            setTimeout(pollOutput, 150);
         }
 
-        function sendInput() {
-            const input = document.getElementById('userInput').value;
-            if (!input) return;
-
-            inputWrapper.addInput(input);
-            document.getElementById('userInput').value = '';
-            document.getElementById('userInput').focus();
+        function submit() {
+            const input = document.getElementById('input');
+            const val = input.value;
+            input.value = '';
+            if (inputResolve) {
+                inputResolve(val);
+                inputResolve = null;
+            }
         }
 
-        document.getElementById('userInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendInput();
-            }
+        document.getElementById('input').addEventListener('keypress', e => {
+            if (e.key === 'Enter') submit();
         });
 
-        window.addEventListener('load', initializePython);
+        init();
     </script>
 </body>
 </html>
