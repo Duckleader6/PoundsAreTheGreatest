@@ -67,7 +67,7 @@ while True:
             
 #pounds to roman units.
             if option2 == 3:
-                to_unit = int(input("What would you like to convert to?\n(1)Uncia\n(2)Libra\n(3)Siliqua\n(4)Deunx\n(5)Dextans\n(6)Dodrans\n(7)Bes\n(8)Septunx\n(9)Semis\n(10)Quincunx\n(11)Triens\n(12)Quadrans\n(13)Sextans\n(14)Scrupulum\n(15)Obulos\n(16)Sicilicus"))
+                to_unit = int(input("What would you like to convert to?\n(1)Uncia\n(2)Libra\n(3)Siliqua\n(4)Deunx\n(5)Dextans\n(6)Dodrans\n(7)Bes\n(8)Septunx\n(9)Semis\n(10)Quincunx\n(11)Triens\n(12)Quadrans\n(13)Sextans\n(14)Scrupulum\n(15)Obulos\n(16)Sicilicus\n"))
                 if to_unit == 1:
                     print(number1 * 1.404 * 12)
                 if to_unit == 2:
