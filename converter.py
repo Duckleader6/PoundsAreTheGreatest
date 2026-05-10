@@ -190,9 +190,13 @@ async def main():
 
 #pounds to misc
                 if option2 == 4:
-                    to_unit = int(await input("What would you like to convert it to?\n(1)Party sized bag of hot cheetos\n"))
+                    to_unit = int(await input("What would you like to convert it to?\n(1)Party sized bag of hot cheetos\n(2)Large Blahaj\n(3)Small Blahaj\n)"))
                     if to_unit == 1:
                         print(number1 / 1.12)
+                    if to_unit == 2:
+                        print(number1 * 16 / 24)
+                    if to_unit == 3:
+                        print(number1 * 16 / 7)
 
 
 # Convert something else to pounds.
