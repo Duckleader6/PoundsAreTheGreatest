@@ -128,7 +128,7 @@ async def main():
             
 #pounds to stupid stuff
             if option1 == 3:
-                option2 = int(await input("What group of stuff?\n(1)Cosmic Stuff\n(2)Currencies\n(3)Family And Friends\n"))
+                option2 = int(await input("What group of stuff?\n(1)Cosmic Stuff\n(2)Currencies\n(3)Family And Friends\n(4)Misc\n"))
                 if option2 == 1:
                     option3 = int(await input("What group of stuff?\n(1)Milky Way\n"))
                     if option3 == 1:
@@ -189,6 +189,14 @@ async def main():
                         print(number1 / 18.8)
         
         
+#pounds to misc
+                if option2 == 4:
+                    to_unit = int(await input("What would you like to convert it to?\n(1)Party sized bag of hot cheetos\n"))
+                    if to_unit == 1:
+                        print(number1 / 1.12)
+
+
+
 # Convert something else to pounds.
         if from_unit == 2:
             number1 = float(await input("How many of that unit?\n"))
