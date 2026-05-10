@@ -129,10 +129,10 @@ async def main():
 #pounds to stupid stuff
             if option1 == 3:
                 option2 = int(await input("What group of stuff?\n(1)Cosmic Stuff\n(2)Currencies\n(3)Family And Friends\n(4)Misc\n"))
+
                 if option2 == 1:
                     option3 = int(await input("What group of stuff?\n(1)Milky Way\n"))
                     if option3 == 1:
-                        
                         
 #pounds to milky way planets and the moon
                         to_unit = int(await input("What would you like to convert it to?\n(1)Earth\n(2)Moon\n(3)Mercury\n(4)Mars\n(5)Jupiter\n(6)Saturn\n(7)Uranus\n(8)Neptune\n(9)Pluto\n"))
@@ -160,7 +160,6 @@ async def main():
                 if option2 == 2:
                     option3 = int(await input("Which Currencies?\n(1)USD\n"))
                     
-                    
 #pounds to USD
                     if option3 == 1:
                         to_unit = int(await input("What would you like to convert it to?\n(1)Bills (they are all the same weight, $1 - $100 bills)\n(2)Pennies before 1983\n(3)Pennies after 1983\n(4)Nickels\n(5)Dimes\n(6)Quarters\n(7)Half Dollars\n(8)Dollar Coins\n"))
@@ -187,14 +186,13 @@ async def main():
                     to_unit = int(await input("What would you like to convert it to?\n(1)Buttercup the Dog\n"))
                     if to_unit == 1:
                         print(number1 / 18.8)
-        
-        
+
+
 #pounds to misc
                 if option2 == 4:
                     to_unit = int(await input("What would you like to convert it to?\n(1)Party sized bag of hot cheetos\n"))
                     if to_unit == 1:
                         print(number1 / 1.12)
-
 
 
 # Convert something else to pounds.
