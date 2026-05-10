@@ -5,518 +5,197 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Conversion Table</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', monospace;
-            background-color: #1e1e1e;
-            color: #e0e0e0;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #3e3e42;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: bold;
-        }
-
-        .back-btn {
-            padding: 8px 16px;
-            background-color: #007acc;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .back-btn:hover {
-            background-color: #005a9e;
-        }
-
-        .section {
-            margin-bottom: 40px;
-            background-color: #252526;
-            padding: 20px;
-            border-radius: 4px;
-            border: 1px solid #3e3e42;
-        }
-
-        .section h2 {
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #4ec9b0;
-            border-bottom: 1px solid #3e3e42;
-            padding-bottom: 10px;
-        }
-
-        .conversion-grid {
-            display: table;
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .conversion-header {
-            display: table-row;
-            background-color: #1e1e1e;
-            font-weight: bold;
-            border-bottom: 2px solid #3e3e42;
-        }
-
-        .conversion-header .id,
-        .conversion-header .name {
-            display: table-cell;
-            padding: 10px;
-            color: #4ec9b0;
-        }
-
-        .conversion-item {
-            display: table-row;
-            border-bottom: 1px solid #3e3e42;
-        }
-
-        .conversion-item .id {
-            display: table-cell;
-            padding: 10px;
-            color: #9cdcfe;
-            width: 10%;
-        }
-
-        .conversion-item .name {
-            display: table-cell;
-            padding: 10px;
-            color: #ce9178;
-        }
-
-        .instructions {
-            margin-bottom: 30px;
-            background-color: #252526;
-            padding: 20px;
-            border-radius: 4px;
-            border: 1px solid #3e3e42;
-            line-height: 1.6;
-            color: #e0e0e0;
-        }
-
-        .instructions h2 {
-            color: #4ec9b0;
-            margin-bottom: 10px;
-        }
-
-        .search-container {
-            margin-bottom: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .search-input {
-            flex: 1;
-            background-color: #1e1e1e;
-            border: 1px solid #3e3e42;
-            color: #e0e0e0;
-            padding: 10px;
-            font-family: 'Courier New', monospace;
-            border-radius: 4px;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: #007acc;
-            box-shadow: 0 0 0 1px #007acc;
-        }
-
-        .search-input::placeholder {
-            color: #858585;
-        }
-
-        .hidden-item {
-            display: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Courier New', monospace; background-color: #1e1e1e; color: #e0e0e0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #3e3e42; }
+        .header h1 { font-size: 24px; font-weight: bold; }
+        .back-btn { padding: 8px 16px; background-color: #007acc; color: white; border: none; border-radius: 4px; cursor: pointer; font-family: 'Courier New', monospace; font-size: 14px; transition: background-color 0.3s; }
+        .back-btn:hover { background-color: #005a9e; }
+        .section { margin-bottom: 40px; background-color: #252526; padding: 20px; border-radius: 4px; border: 1px solid #3e3e42; }
+        .section h2 { font-size: 16px; margin-bottom: 15px; color: #4ec9b0; border-bottom: 1px solid #3e3e42; padding-bottom: 10px; }
+        .conversion-grid { display: table; width: 100%; border-collapse: collapse; }
+        .conversion-header { display: table-row; background-color: #1e1e1e; font-weight: bold; border-bottom: 2px solid #3e3e42; }
+        .conversion-header .id, .conversion-header .name { display: table-cell; padding: 10px; color: #4ec9b0; }
+        .conversion-item { display: table-row; border-bottom: 1px solid #3e3e42; }
+        .conversion-item .id { display: table-cell; padding: 10px; color: #9cdcfe; width: 10%; }
+        .conversion-item .name { display: table-cell; padding: 10px; color: #ce9178; }
+        .instructions { margin-bottom: 30px; background-color: #252526; padding: 20px; border-radius: 4px; border: 1px solid #3e3e42; line-height: 1.6; color: #e0e0e0; }
+        .instructions h2 { color: #4ec9b0; margin-bottom: 10px; }
+        .search-container { margin-bottom: 20px; display: flex; gap: 10px; }
+        .search-input { flex: 1; background-color: #1e1e1e; border: 1px solid #3e3e42; color: #e0e0e0; padding: 10px; font-family: 'Courier New', monospace; border-radius: 4px; }
+        .search-input:focus { outline: none; border-color: #007acc; box-shadow: 0 0 0 1px #007acc; }
+        .search-input::placeholder { color: #858585; }
+        .hidden-item { display: none !important; }
+        .hidden-section { display: none; }
+        .no-results { display: none; padding: 20px; text-align: center; color: #858585; background-color: #252526; border-radius: 4px; border: 1px solid #3e3e42; margin-bottom: 20px; }
+        .no-results.visible { display: block; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
             <h1>Conversion Table</h1>
-            <button class="back-btn" onclick="window.location.href='index.html';">
-                ← Back to Converter
-            </button>
+            <button class="back-btn" onclick="window.location.href='index.html';">← Back to Converter</button>
         </div>
 
         <div class="instructions">
             <h2>How to Use This Table</h2>
-            <p>This table shows all the units of weight measurement you can convert to from pounds. The way that it works is easy. Search for what tou want to convert to make sure it exists. Then, use the ID number once you are in the right group of the file converter to convert. For example if i want to convert 120 pounds to saturns. I would search for saturn, find the id, go to the converter, navigate to the milky way tab and then type the id in. This is most useful for the misc tab in stupid stuff.</p>
+            <p>This table shows all the units of weight measurement you can convert to from pounds. The way that it works is easy. Search for what you want to convert to make sure it exists. Then, use the ID number once you are in the right group of the file converter to convert. For example if i want to convert 120 pounds to saturns. I would search for saturn, find the id, go to the converter, navigate to the milky way tab and then type the id in. This is most useful for the misc tab in stupid stuff.</p>
         </div>
 
         <div class="search-container">
-            <input 
-                type="text" 
-                id="searchInput" 
-                class="search-input" 
-                placeholder="Search units by name or ID..."
-                onkeyup="searchTable()"
-            >
+            <input type="text" id="searchInput" class="search-input" placeholder="Search units by name or ID..." oninput="searchTable()">
         </div>
 
-        <div class="section">
+        <div class="no-results" id="noResults">No units found matching your search.</div>
+
+        <div class="section" data-section>
             <h2>Conventional Units (From Pounds)</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Grams</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Milligrams</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Kilograms</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">4</div>
-                    <div class="name">Metric Ton</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">5</div>
-                    <div class="name">Ounce</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">6</div>
-                    <div class="name">Pound</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">7</div>
-                    <div class="name">Stone</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">8</div>
-                    <div class="name">Hundredweight</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">9</div>
-                    <div class="name">US Ton</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Grams</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Milligrams</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Kilograms</div></div>
+                <div class="conversion-item"><div class="id">4</div><div class="name">Metric Ton</div></div>
+                <div class="conversion-item"><div class="id">5</div><div class="name">Ounce</div></div>
+                <div class="conversion-item"><div class="id">6</div><div class="name">Pound</div></div>
+                <div class="conversion-item"><div class="id">7</div><div class="name">Stone</div></div>
+                <div class="conversion-item"><div class="id">8</div><div class="name">Hundredweight</div></div>
+                <div class="conversion-item"><div class="id">9</div><div class="name">US Ton</div></div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" data-section>
             <h2>Troy and Apothecary Units (From Pounds)</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Grains</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Pennyweights</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Troy Ounces</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">4</div>
-                    <div class="name">Troy Pounds</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">5</div>
-                    <div class="name">Apothecary Ounces</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">6</div>
-                    <div class="name">Apothecary Pounds</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">7</div>
-                    <div class="name">Dram</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">8</div>
-                    <div class="name">Scruple</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Grains</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Pennyweights</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Troy Ounces</div></div>
+                <div class="conversion-item"><div class="id">4</div><div class="name">Troy Pounds</div></div>
+                <div class="conversion-item"><div class="id">5</div><div class="name">Apothecary Ounces</div></div>
+                <div class="conversion-item"><div class="id">6</div><div class="name">Apothecary Pounds</div></div>
+                <div class="conversion-item"><div class="id">7</div><div class="name">Dram</div></div>
+                <div class="conversion-item"><div class="id">8</div><div class="name">Scruple</div></div>
             </div>
         </div>
-    
-    
-        <div class="section">
+
+        <div class="section" data-section>
             <h2>Tower Weights</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Tower Ounces</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Tower Pounds</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Tower Ounces</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Tower Pounds</div></div>
             </div>
         </div>
-    
-        <div class="section">
+
+        <div class="section" data-section>
             <h2>Roman Units</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Uncia</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Libra</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Siliqua</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">4</div>
-                    <div class="name">Deunx</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">5</div>
-                    <div class="name">Dextans</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">6</div>
-                    <div class="name">Dodrans</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">7</div>
-                    <div class="name">Bes</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">8</div>
-                    <div class="name">Septunx</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">9</div>
-                    <div class="name">Semis</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">10</div>
-                    <div class="name">Quincunx</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">11</div>
-                    <div class="name">Triens</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">12</div>
-                    <div class="name">Quadrans</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">13</div>
-                    <div class="name">Sextans</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">14</div>
-                    <div class="name">Scrupulum</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">15</div>
-                    <div class="name">Obulos</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">16</div>
-                    <div class="name">Sicilicus</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Uncia</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Libra</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Siliqua</div></div>
+                <div class="conversion-item"><div class="id">4</div><div class="name">Deunx</div></div>
+                <div class="conversion-item"><div class="id">5</div><div class="name">Dextans</div></div>
+                <div class="conversion-item"><div class="id">6</div><div class="name">Dodrans</div></div>
+                <div class="conversion-item"><div class="id">7</div><div class="name">Bes</div></div>
+                <div class="conversion-item"><div class="id">8</div><div class="name">Septunx</div></div>
+                <div class="conversion-item"><div class="id">9</div><div class="name">Semis</div></div>
+                <div class="conversion-item"><div class="id">10</div><div class="name">Quincunx</div></div>
+                <div class="conversion-item"><div class="id">11</div><div class="name">Triens</div></div>
+                <div class="conversion-item"><div class="id">12</div><div class="name">Quadrans</div></div>
+                <div class="conversion-item"><div class="id">13</div><div class="name">Sextans</div></div>
+                <div class="conversion-item"><div class="id">14</div><div class="name">Scrupulum</div></div>
+                <div class="conversion-item"><div class="id">15</div><div class="name">Obulos</div></div>
+                <div class="conversion-item"><div class="id">16</div><div class="name">Sicilicus</div></div>
             </div>
         </div>
-        
-        <div class="section">
+
+        <div class="section" data-section>
             <h2>Babylonian Units</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Skekal</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Mina</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Talent</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Skekal</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Mina</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Talent</div></div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" data-section>
             <h2>Ancient Egyptian Units</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Deban</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Kite</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Shematy</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Deban</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Kite</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Shematy</div></div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" data-section>
             <h2>Milky Way Planets and the Moon</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Earth</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Moon</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Mercury</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">4</div>
-                    <div class="name">Mars</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">5</div>
-                    <div class="name">Jupiter</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">6</div>
-                    <div class="name">Saturn</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">7</div>
-                    <div class="name">Uranus</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">8</div>
-                    <div class="name">Neptune</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Earth</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Moon</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Mercury</div></div>
+                <div class="conversion-item"><div class="id">4</div><div class="name">Mars</div></div>
+                <div class="conversion-item"><div class="id">5</div><div class="name">Jupiter</div></div>
+                <div class="conversion-item"><div class="id">6</div><div class="name">Saturn</div></div>
+                <div class="conversion-item"><div class="id">7</div><div class="name">Uranus</div></div>
+                <div class="conversion-item"><div class="id">8</div><div class="name">Neptune</div></div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" data-section>
             <h2>USD</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Bills</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">2</div>
-                    <div class="name">Penny before 1983</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">3</div>
-                    <div class="name">Penny after 1983</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">4</div>
-                    <div class="name">Nickel</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">5</div>
-                    <div class="name">Dime</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">6</div>
-                    <div class="name">Quarters</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">7</div>
-                    <div class="name">Half Dollar</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">8</div>
-                    <div class="name">Dollar coin</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Bills</div></div>
+                <div class="conversion-item"><div class="id">2</div><div class="name">Penny before 1983</div></div>
+                <div class="conversion-item"><div class="id">3</div><div class="name">Penny after 1983</div></div>
+                <div class="conversion-item"><div class="id">4</div><div class="name">Nickel</div></div>
+                <div class="conversion-item"><div class="id">5</div><div class="name">Dime</div></div>
+                <div class="conversion-item"><div class="id">6</div><div class="name">Quarters</div></div>
+                <div class="conversion-item"><div class="id">7</div><div class="name">Half Dollar</div></div>
+                <div class="conversion-item"><div class="id">8</div><div class="name">Dollar coin</div></div>
             </div>
         </div>
 
-        <div class="section">
+        <div class="section" data-section>
             <h2>Misc</h2>
             <div class="conversion-grid">
-                <div class="conversion-header">
-                    <div class="id">ID</div>
-                    <div class="name">Name</div>
-                </div>
-                <div class="conversion-item">
-                    <div class="id">1</div>
-                    <div class="name">Party Sized Hot Cheetos</div>
-                </div>
+                <div class="conversion-header"><div class="id">ID</div><div class="name">Name</div></div>
+                <div class="conversion-item"><div class="id">1</div><div class="name">Party Sized Hot Cheetos</div></div>
             </div>
         </div>
-    
+
     </div>
 
     <script>
         function searchTable() {
-            const searchInput = document.getElementById('searchInput').value.toLowerCase();
-            const items = document.querySelectorAll('.conversion-item');
-            
-            items.forEach(item => {
-                const id = item.querySelector('.id').textContent.toLowerCase();
-                const name = item.querySelector('.name').textContent.toLowerCase();
-                
-                if (id.includes(searchInput) || name.includes(searchInput)) {
-                    item.classList.remove('hidden-item');
-                } else {
-                    item.classList.add('hidden-item');
-                }
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const sections = document.querySelectorAll('[data-section]');
+            let anyVisible = false;
+
+            sections.forEach(section => {
+                const items = section.querySelectorAll('.conversion-item');
+                let sectionHasMatch = false;
+
+                items.forEach(item => {
+                    const id   = item.querySelector('.id').textContent.toLowerCase();
+                    const name = item.querySelector('.name').textContent.toLowerCase();
+                    const matches = !query || id.includes(query) || name.includes(query);
+                    item.classList.toggle('hidden-item', !matches);
+                    if (matches) sectionHasMatch = true;
+                });
+
+                section.classList.toggle('hidden-section', !sectionHasMatch);
+                if (sectionHasMatch) anyVisible = true;
             });
+
+            document.getElementById('noResults').classList.toggle('visible', !anyVisible && query !== '');
         }
     </script>
 </body>
